@@ -1,9 +1,11 @@
-// import { Redis } from '@upstash/redis'
+// const mongoose = require('mongoose');
+
+// db().catch(err => console.log(err));
+
+//  async function db() {
 
 
-// export const db : Redis = new Redis({
-//     url: process.env.UPSTASH_REDIS_REST_URL || '',
-//     token: process.env.UPSTASH_REDIS_REST_TOKEN || ''
-// })
-// // or solve it like this 
-// //  export const db = Redis.fromEnv()
+//   await mongoose.connect(process.env.MONGODB_URI);
+
+//   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+// }

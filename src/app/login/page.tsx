@@ -8,6 +8,7 @@ import { error } from 'console';
 import { Context, valueType } from '@/components/contextApis/ContextProvider';
 import { useRouter } from 'next/navigation';
 import { GoogleAuthProvider } from 'firebase/auth';
+import axios from 'axios';
 type Props = {}
 
 export default function page({ }: Props) {
@@ -17,7 +18,16 @@ export default function page({ }: Props) {
     const router = useRouter();
 
     const googleLogin = contextValue?.googleLogin
-    const { loading, setLoading ,user} = contextValue!
+    const { loading, setLoading, user } = contextValue!
+
+
+    const saveUserToDB = async (user: User) => {
+        // save user to DB
+       const res =  await axios.post('http://localhost:3000/api/saveUser', user)
+        console.log(res.data.user);
+       setLoading(false)
+    }
+
 
     const loginWithGoogle = async () => {
         if (googleLogin) {
@@ -28,7 +38,10 @@ export default function page({ }: Props) {
 
                     // The signed-in user info.
                     const user = result.user;
-                    setLoading(false)
+                    console.log(user);
+                    saveUserToDB(user)
+
+
                     router.push('/dashboard')
 
                 }).catch((error) => {
@@ -57,7 +70,7 @@ export default function page({ }: Props) {
         }
     };
 
-    console.log(user);
+
 
 
     return (
