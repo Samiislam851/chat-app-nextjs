@@ -1,20 +1,27 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { signIn } from 'next-auth/react'
+import { Context, valueType } from '@/components/ui/ContextProvider';
+import toast from 'react-hot-toast';
+import { error } from 'console';
 type Props = {}
 
 export default function page({ }: Props) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const contextValue = useContext<valueType | null>(Context)
+    console.log(contextValue);
+
 
     const loginWitGoogle = async () => {
         setIsLoading(true)
         try {
+            throw new Error('nothung')
             await signIn('google')
         } catch (err) {
             console.log(err);
-
+            toast.error('Something went wrong with your login')
         } finally {
             setIsLoading(false)
         }
