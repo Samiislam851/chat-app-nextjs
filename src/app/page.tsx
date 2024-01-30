@@ -1,8 +1,12 @@
-import { db } from "@/lib/db";
+'use client'
+import { Context } from "@/components/contextApis/ContextProvider";
 import Image from "next/image";
+import { useContext } from "react";
 
-export default async function Home() {
-  await db.set('hello', 'hello')
+export default  function Home() {
+  // await db.set('hello', 'hello')
+
+  
 
   return (
     <>

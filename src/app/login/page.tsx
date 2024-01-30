@@ -3,31 +3,61 @@ import React, { useContext, useState } from 'react'
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { signIn } from 'next-auth/react'
-import { Context, valueType } from '@/components/ui/ContextProvider';
 import toast from 'react-hot-toast';
 import { error } from 'console';
+import { Context, valueType } from '@/components/contextApis/ContextProvider';
+import { useRouter } from 'next/navigation';
+import { GoogleAuthProvider } from 'firebase/auth';
 type Props = {}
 
 export default function page({ }: Props) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const contextValue = useContext<valueType | null>(Context)
-    console.log(contextValue);
+
+    const router = useRouter();
+
+    const googleLogin = contextValue?.googleLogin
+    const { loading, setLoading ,user} = contextValue!
+
+    const loginWithGoogle = async () => {
+        if (googleLogin) {
+            setLoading(true);
+
+            try {
+                googleLogin().then((result) => {
+
+                    // The signed-in user info.
+                    const user = result.user;
+                    setLoading(false)
+                    router.push('/dashboard')
+
+                }).catch((error) => {
+                    console.log(error);
+
+                    // Handle Errors here.
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    // The email of the user's account used.
+                    const email = error.customData.email;
+                    // The AuthCredential type that was used.
+                    const credential = GoogleAuthProvider.credentialFromError(error);
+                    // ...
+                });
+
+            } catch (error) {
+                console.log(error);
+
+            } finally {
+                setIsLoading(false);
+            }
 
 
-    const loginWitGoogle = async () => {
-        setIsLoading(true)
-        try {
-            // throw new Error('nothung')
-            await signIn('google')
-        } catch (err) {
-            console.log(err);
-            toast.error('Something went wrong with your login')
-        } finally {
-            setIsLoading(false)
+
+
         }
-    }
+    };
 
-    console.log(isLoading);
+    console.log(user);
 
 
     return (
@@ -48,7 +78,7 @@ export default function page({ }: Props) {
 
 
 
-                <div><button onClick={loginWitGoogle} className='border px-6 py-2 my-5 rounded-md bg-slate-800 text-white hover:shadow-xl transition-all ease-in-out duration-300'>{isLoading ? <AiOutlineLoading3Quarters className=' inline text-xl animate-spin' /> : <FcGoogle className=' inline text-xl pb-1' />}     login with google</button></div>
+                <div><button onClick={loginWithGoogle} className='border px-6 py-2 my-5 rounded-md bg-slate-800 text-white hover:shadow-xl transition-all ease-in-out duration-300'>{isLoading ? <AiOutlineLoading3Quarters className=' inline text-xl animate-spin' /> : <FcGoogle className=' inline text-xl pb-1' />}     login with google</button></div>
             </div>
         </>
     )
