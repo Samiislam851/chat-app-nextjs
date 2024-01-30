@@ -12,6 +12,7 @@
     "@next-auth/upstash-redis-adapter": "^3.0.4",
     "@upstash/redis": "^1.28.2",
     "class-variance-authority": "^0.7.0",
+    "firebase": "^10.7.2",
     "next": "14.1.0",
     "next-auth": "^4.24.5",
     "react": "^18",

@@ -17,7 +17,7 @@ export default function page({ }: Props) {
     const loginWitGoogle = async () => {
         setIsLoading(true)
         try {
-            throw new Error('nothung')
+            // throw new Error('nothung')
             await signIn('google')
         } catch (err) {
             console.log(err);
