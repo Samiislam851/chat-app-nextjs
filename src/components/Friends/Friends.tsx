@@ -13,7 +13,7 @@ interface User {
 const Friends = (props: Props) => {
 
     // const {user} = useContext(Context)
-    const [friends, setFriends] = useState<User []>([])
+    const [friends, setFriends] = useState<User[]>([])
     useEffect(() => {
 
         axios.get('http://localhost:3000/api/getUsers', {
@@ -22,6 +22,7 @@ const Friends = (props: Props) => {
             }
         }).then(res => {
 
+            console.log(res.data);
 
             setFriends(res.data.users)
         }).catch(err => console.log(err))
@@ -39,7 +40,7 @@ const Friends = (props: Props) => {
 
             <ul>
                 {
-                    friends?.map((friend, index) => <li key={friend._id }>{friend.name}</li>)
+                    friends?.map((friend, index) => <li key={friend._id}>{friend.name}</li>)
                 }
             </ul>
 
