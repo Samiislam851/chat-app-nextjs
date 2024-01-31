@@ -31,29 +31,32 @@ function page({ }: Props) {
   if (loading) return <div className='w-full py-10'><AiOutlineLoading3Quarters className='animate-spin text-4xl mx-auto' /></div>
 
   else if (!user) {
-
-  } 
-  
-  
+    router.push('/login')
+  } else {
 
     return (
       <div>
-        {user && 
-        
-        <div>
-        <button className="bg-red-600 text-white p-3" onClick={logOutFunc}>Log Out</button>
-        <div className='w-3/4 border rounded-xl h-[100vh] p-2'>
-          <Friends />
-        </div> </div>
+        {user &&
+
+          <div>
+            <button className="bg-red-600 text-white p-3" onClick={logOutFunc}>Log Out</button>
+            <div className='w-3/4 border rounded-xl h-[100vh] p-2'>
+              <Friends />
+            </div> </div>
         }
-        
-        
+
+
 
 
 
       </div>
     )
   }
+
+
+
+
+}
 
 
 
