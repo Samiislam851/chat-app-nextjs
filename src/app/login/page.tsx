@@ -18,14 +18,22 @@ export default function page({ }: Props) {
     const router = useRouter();
 
     const googleLogin = contextValue?.googleLogin
-    const { loading, setLoading, user } = contextValue!
+    const { loading, setLoading, user, logOut } = contextValue!
 
 
     const saveUserToDB = async (user: User) => {
         // save user to DB
-       const res =  await axios.post('http://localhost:3000/api/saveUser', user)
-        console.log(res.data.user);
-       setLoading(false)
+        const res = await axios.post('http://localhost:3000/api/saveUser', user)
+
+        if (res.status == 200) {
+            router.push('/dashboard')
+        } else {
+            await logOut()
+        }
+        
+        localStorage.setItem('chat-app',res.data.token)
+
+        setLoading(false)
     }
 
 
@@ -38,11 +46,11 @@ export default function page({ }: Props) {
 
                     // The signed-in user info.
                     const user = result.user;
-                    console.log(user);
+                   
                     saveUserToDB(user)
 
 
-                    router.push('/dashboard')
+
 
                 }).catch((error) => {
                     console.log(error);
