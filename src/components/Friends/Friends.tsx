@@ -12,8 +12,22 @@ interface User {
 }
 const Friends = (props: Props) => {
 
-    // const {user} = useContext(Context)
+
+    const contexts = useContext(Context)
+
+    const { logOut } = contexts!
     const [friends, setFriends] = useState<User[]>([])
+
+
+    const logOutFunc = async () => {
+        if (logOut) {
+    
+          await logOut()
+    
+        }
+      }
+
+
     useEffect(() => {
 
         axios.get('http://localhost:3000/api/getUsers', {
@@ -22,10 +36,21 @@ const Friends = (props: Props) => {
             }
         }).then(res => {
 
-            console.log(res.data);
+            console.log(res);
+            if (res.status == 200) {
+                setFriends(res.data.users)
+            }
 
-            setFriends(res.data.users)
-        }).catch(err => console.log(err))
+
+        }).catch(err => { 
+            
+            console.log(err.response.data.message);
+            
+        
+           logOutFunc()
+        
+        
+        })
 
     }, [])
 

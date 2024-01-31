@@ -33,9 +33,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             console.log(user);
             const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-                expiresIn: '1d'
+                expiresIn: '5h'
             })
-            console.log('token ====== ', token);
+         
            
             res.status(200).json({ user, token })
         }

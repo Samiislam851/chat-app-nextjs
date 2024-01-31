@@ -30,8 +30,8 @@ export default function page({ }: Props) {
         } else {
             await logOut()
         }
-        
-        localStorage.setItem('chat-app',res.data.token)
+
+        localStorage.setItem('chat-app', res.data.token)
 
         setLoading(false)
     }
@@ -46,7 +46,7 @@ export default function page({ }: Props) {
 
                     // The signed-in user info.
                     const user = result.user;
-                   
+
                     saveUserToDB(user)
 
 
@@ -79,28 +79,29 @@ export default function page({ }: Props) {
     };
 
 
-
-
+  
     return (
-        <>
 
-            <div className='py-10 md:py-32 mx-5 md:mx-7 lg:mx-10 text-center '>
-                <h3 className='text-xl text-gray-600 font-medium'>Logo</h3>
-                <h3 className='text-3xl font-medium md:font-bold my-6'>Sign in to you account</h3>
+        <> <div className='py-10 md:py-32 mx-5 md:mx-7 lg:mx-10 text-center '>
+            <h3 className='text-xl text-gray-600 font-medium'>Logo</h3>
+            <h3 className='text-3xl font-medium md:font-bold my-6'>Sign in to you account</h3>
 
-                <form className='w-fit mx-auto flex flex-col items-center justify-center gap-1 pb-5' >
-                    <input className='p-2 m-2 rounded-lg border border-gray-300' type="text" placeholder='Enter your Email' />
+            <form className='w-fit mx-auto flex flex-col items-center justify-center gap-1 pb-5' >
+                <input className='p-2 m-2 rounded-lg border border-gray-300' type="text" placeholder='Enter your Email' />
 
-                    <input className='p-2 m-2 rounded-lg border border-gray-300' type="text" placeholder='Enter your Password' />
+                <input className='p-2 m-2 rounded-lg border border-gray-300' type="text" placeholder='Enter your Password' />
 
-                    <button onClick={() => console.log('login clicked')} className='border p-1 px-3 rounded-lg bg-cyan-500 text-whitehover:shadow-xl transition-all ease-in-out duration-300 '>Login</button>
-                </form>
-
+                <button onClick={() => console.log('login clicked')} className='border p-1 px-3 rounded-lg bg-cyan-500 text-whitehover:shadow-xl transition-all ease-in-out duration-300 '>Login</button>
+            </form>
 
 
 
-                <div><button onClick={loginWithGoogle} className='border px-6 py-2 my-5 rounded-md bg-slate-800 text-white hover:shadow-xl transition-all ease-in-out duration-300'>{isLoading ? <AiOutlineLoading3Quarters className=' inline text-xl animate-spin' /> : <FcGoogle className=' inline text-xl pb-1' />}     login with google</button></div>
-            </div>
-        </>
+
+            <div><button onClick={loginWithGoogle} className='border px-6 py-2 my-5 rounded-md bg-slate-800 text-white hover:shadow-xl transition-all ease-in-out duration-300'>{isLoading ? <AiOutlineLoading3Quarters className=' inline text-xl animate-spin' /> : <FcGoogle className=' inline text-xl pb-1' />}     login with google</button></div>
+        </div></>
+
+
     )
 }
+
+
