@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import app from '../../firebaseCredentials/app'
 import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { UserCredential } from "firebase/auth";
+import { User } from '@/types/db';
 //////////////// interfaces and types ////////////////////////
 type Props = {
     children: ReactNode

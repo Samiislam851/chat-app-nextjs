@@ -2,14 +2,26 @@
 import React, { useContext, useState } from 'react'
 import { FcGoogle } from "react-icons/fc";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { signIn } from 'next-auth/react'
+
 import toast from 'react-hot-toast';
-import { error } from 'console';
+
 import { Context, valueType } from '@/components/contextApis/ContextProvider';
 import { useRouter } from 'next/navigation';
 import { GoogleAuthProvider } from 'firebase/auth';
 import axios from 'axios';
+import { User } from '@/types/db';
+import { useForm } from 'react-hook-form';
+
+
+
+
 type Props = {}
+type inputObject = {
+    email: string,
+    password: string
+}
+
+
 
 export default function page({ }: Props) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -42,27 +54,19 @@ export default function page({ }: Props) {
             setLoading(true);
 
             try {
-                googleLogin().then((result) => {
-
-                    // The signed-in user info.
-                    const user = result.user;
-
-                    saveUserToDB(user)
-
-
-
+                googleLogin().then((result) => {       
+                    saveUserToDB(result.user)
 
                 }).catch((error) => {
                     console.log(error);
-
-                    // Handle Errors here.
+                 
                     const errorCode = error.code;
                     const errorMessage = error.message;
-                    // The email of the user's account used.
+                 
                     const email = error.customData.email;
-                    // The AuthCredential type that was used.
+                  
                     const credential = GoogleAuthProvider.credentialFromError(error);
-                    // ...
+                    
                 });
 
             } catch (error) {
@@ -79,6 +83,10 @@ export default function page({ }: Props) {
     };
 
 
+    const {register, handleSubmit} = useForm<inputObject>()
+const handleRegister = (data: inputObject)=>{
+
+}
   
     return (
 
@@ -86,7 +94,7 @@ export default function page({ }: Props) {
             <h3 className='text-xl text-gray-600 font-medium'>Logo</h3>
             <h3 className='text-3xl font-medium md:font-bold my-6'>Sign in to you account</h3>
 
-            <form className='w-fit mx-auto flex flex-col items-center justify-center gap-1 pb-5' >
+            <form className='w-fit mx-auto flex flex-col items-center justify-center gap-1 pb-5' onSubmit={handleSubmit(handleRegister)} >
                 <input className='p-2 m-2 rounded-lg border border-gray-300' type="text" placeholder='Enter your Email' />
 
                 <input className='p-2 m-2 rounded-lg border border-gray-300' type="text" placeholder='Enter your Password' />

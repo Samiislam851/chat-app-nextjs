@@ -20,9 +20,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     image: photoURL
                 })
 
+                const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+                    expiresIn: '5h'
+                })
+
                 const response = await newUser.save()
 
-                res.status(200).json({ response })
+                res.status(200).json({ response,token })
 
             } catch (error) {
                 console.log(error);

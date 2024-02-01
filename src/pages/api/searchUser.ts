@@ -26,8 +26,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const regexPattern = new RegExp("\\b" + inputValue + "\\w{0,}\\b", "i");
                 const users = await User.find({
                     $or: [
-                        { name: regexPattern }
-                        ,
+                        // { name: regexPattern }
+                        // ,
                         { email: regexPattern }
                     ]
                 })
