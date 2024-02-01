@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (result.success) {
       try {
       
-        const users = await User.find({})
+        const users = await User.find({}) 
 
 
 

@@ -8,7 +8,7 @@ const verifyJWT : (req: NextApiRequest, res: NextApiResponse, token: string) => 
     if (!process.env.JWT_SECRET) {
       reject(new Error("JWT secret not defined"));
     }
-console.log('the token we received', token);
+// console.log('the token we received', token);
 
     // Verify the token
     jwt.verify(token, process.env.JWT_SECRET!, (err, decoded) => {
