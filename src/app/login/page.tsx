@@ -32,7 +32,7 @@ export default function page({ }: Props) {
     const router = useRouter();
 
     const googleLogin = contextValue?.googleLogin
-    const { loading, setLoading, user, logOut } = contextValue!
+    const { loading, setLoading, user, logOut, emailSignIn } = contextValue!
 
 
     const saveUserToDB = async (user: User) => {
@@ -46,7 +46,7 @@ export default function page({ }: Props) {
             await logOut()
         }
 
-  
+
 
         setLoading(false)
     }
@@ -85,9 +85,24 @@ export default function page({ }: Props) {
     };
 
 
+
+
+
     const { register, handleSubmit } = useForm<inputObject>()
-    const handleRegister = (data: inputObject) => {
+    const handleLogin = (data: inputObject) => {
         console.log(data);
+
+
+        emailSignIn(data.email, data.password).then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            saveUserToDB(user)
+
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
     }
 
     return (
@@ -95,17 +110,17 @@ export default function page({ }: Props) {
         <>
 
             <div className='background min-h-[100vh] text-center flex flex-col-reverse md:flex-row gap-10 justify-center items-center '>
-         
+
 
                 <div className='w-fit '>
                     <div className='rounded-lg py-5 backdrop-blur-md bg-gray-200 bg-opacity-[0.09] border border-opacity-10 border-gray-400 max-w-md  transition-all ease-in-out duration-500 hover:shadow-2xl '>
                         <div className='w-fit mx-auto'>
-                       <Image className='' src={'/logo.png'} width={50}  height={50} alt={'Logo'} />
-                       </div>
-                       
+                            <Image className='' src={'/logo.png'} width={50} height={50} alt={'Logo'} />
+                        </div>
+
                         <h3 className='text-3xl text-white font-medium md:font-bold px-5 md:px-10 my-6'>Sign in to you account</h3>
 
-                        <form className='max-w-md  px-5 md:px-10 mx-auto flex flex-col items-center justify-center gap-1 pb-5' onSubmit={handleSubmit(handleRegister)} >
+                        <form className='max-w-md  px-5 md:px-10 mx-auto flex flex-col items-center justify-center gap-1 pb-5' onSubmit={handleSubmit(handleLogin)} >
                             <input {...register('email')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your Email' />
 
                             <input  {...register('password')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your Password' />

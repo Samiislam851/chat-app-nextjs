@@ -18,7 +18,7 @@ export interface valueType {
     logOut: () => void,
     loading: boolean,
     setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-    emailRegister: (email: string, password: string) => Promise<UserCredential>,
+    emailSignIn: (email: string, password: string) => Promise<UserCredential>,
     emailRegister: (email: string, password: string) => Promise<UserCredential>,
 }
 
@@ -77,16 +77,8 @@ export default function ContextProvider({ children }: Props) {
 
 
     const emailSignIn = (email: string, password: string) => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-            });
+     return   signInWithEmailAndPassword(auth, email, password)
+            
     }
     ////////////////////// Sign Out ////////////////////////////
     const logOut = () => {
@@ -111,7 +103,7 @@ export default function ContextProvider({ children }: Props) {
 
     const value: valueType = {
         first, setFirst, googleLogin, user, logOut,
-        loading, setLoading, emailRegister
+        loading, setLoading, emailRegister,emailSignIn
     }
 
     return (
