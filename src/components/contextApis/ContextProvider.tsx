@@ -2,7 +2,7 @@
 import React, { ReactNode, createContext, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import app from '../../firebaseCredentials/app'
-import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { UserCredential } from "firebase/auth";
 import { User } from '@/types/db';
 //////////////// interfaces and types ////////////////////////
@@ -17,7 +17,9 @@ export interface valueType {
     user: User | null,
     logOut: () => void,
     loading: boolean,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    emailRegister: (email: string, password: string) => Promise<UserCredential>,
+    emailRegister: (email: string, password: string) => Promise<UserCredential>,
 }
 
 
@@ -67,6 +69,25 @@ export default function ContextProvider({ children }: Props) {
     }, [])
 
 
+
+    const emailRegister = (email: string, password: string) => {
+        setLoading(true)
+        return createUserWithEmailAndPassword(auth, email, password)
+    }
+
+
+    const emailSignIn = (email: string, password: string) => {
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+            });
+    }
     ////////////////////// Sign Out ////////////////////////////
     const logOut = () => {
         setLoading(true)
@@ -90,7 +111,7 @@ export default function ContextProvider({ children }: Props) {
 
     const value: valueType = {
         first, setFirst, googleLogin, user, logOut,
-        loading, setLoading
+        loading, setLoading, emailRegister
     }
 
     return (

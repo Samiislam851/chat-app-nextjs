@@ -9,25 +9,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
 
 
-        const { email, displayName, photoURL } = req.body
+        const { email, name, image, password } = req.body
+
+
         const user = await User.findOne({ email: email })
+   
+        
 
         if (!user) {
             try {
                 const newUser = new User({
-                    name: displayName,
+                    password: password,
+                    name: name,
                     email: email,
-                    image: photoURL,
-                    password: ' no password'
+                    image: image,
+                    
                 })
 
                 const token = jwt.sign({ user }, process.env.JWT_SECRET, {
                     expiresIn: '5h'
                 })
+          
 
                 const response = await newUser.save()
 
-                res.status(200).json({ response,token })
+                res.status(200).json({ response, token })
 
             } catch (error) {
                 console.log(error);
@@ -40,8 +46,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const token = jwt.sign({ user }, process.env.JWT_SECRET, {
                 expiresIn: '5h'
             })
-         
-           
+
+
             res.status(200).json({ user, token })
         }
     }

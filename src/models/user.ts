@@ -7,6 +7,7 @@ const userSchema = new Schema({
         lowerCase: true
     },
     image: String,
+    password: String
 
 }) 
 export const User = mongoose.models.users || mongoose.model('users',userSchema)
