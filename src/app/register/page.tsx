@@ -42,18 +42,27 @@ export default function page({ }: Props) {
         // save user to DB
         console.log('from save user to db', user);
 
-        const res = await axios.post('http://localhost:3000/api/saveUserToDB', user)
+        try {
+            const res = await axios.post('http://localhost:3000/api/saveUserToDB', user)
 
-        if (res.status == 200) {
-            localStorage.setItem('chat-app', res.data.token)
-            router.push('/dashboard')
-        } else {
-            await logOut()
+            if (res.status == 200) {
+                localStorage.setItem('chat-app', res.data.token)
+                router.push('/dashboard')
+            } else {
+                await logOut()
+            }
+
+        } catch (error) {
+            console.log(error);
+
+        } finally {
+            setLoading(false)
+
         }
 
 
 
-        setLoading(false)
+
     }
 
 
@@ -66,25 +75,28 @@ export default function page({ }: Props) {
         const user = { ...data }
         console.log(user);
 
-        emailRegister(user.email, user.password).then((userCredential) => {
-
-
-            saveUserToDB(user)
-            console.log(userCredential);
-
-
-        })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(error.message);
-
-            });
-
+        if (/^\s*$/.test(data.email) || /^\s*$/.test(data.password) || /^\s*$/.test(data.image) || /^\s*$/.test(data.name)) {
+            toast.error(' Please give all the informations ')
+        } else {
+            setLoading(true)
+            emailRegister(user.email, user.password)
+                .then((userCredential) => {
+                    saveUserToDB(user)
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    setLoading(false)
+                    toast.error(errorMessage);
+                });
+        }
 
     }
 
-    return (
+    if (user) {
+        router.push('/dashboard')
+    }
+    else return (
         <>
 
             <div className='background min-h-[100vh] text-center flex flex-col-reverse md:flex-row gap-10 justify-center items-center '>
@@ -99,14 +111,20 @@ export default function page({ }: Props) {
                         <h3 className='text-3xl text-white font-medium md:font-bold px-5 md:px-10 my-6'>Create an account</h3>
 
                         <form className='max-w-md  px-5 md:px-10 mx-auto flex flex-col items-center justify-center gap-1 pb-5' onSubmit={handleSubmit(handleRegister)} >
-                            <input {...register('name')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your Name' />
-                            <input {...register('image')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your image link' />
+                            <input required {...register('name')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your Name' />
+                            <input required {...register('image')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your image link' />
 
-                            <input {...register('email')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your Email' />
+                            <input required {...register('email')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your Email' />
 
-                            <input  {...register('password')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your Password' />
+                            <input required {...register('password')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your Password' />
 
-                            <button className='border py-2 px-4 rounded-lg bg-purple-600 text-white hover:shadow-xl transition-all ease-in-out duration-300 hover:scale-105 border-0 '>Register</button>
+                            <button className='border py-2 px-4 rounded-lg bg-[#81689D] text-white hover:shadow-xl transition-all ease-in-out duration-300 hover:scale-105 border-0 '>
+                                {loading ?
+                                    <AiOutlineLoading3Quarters className='text-3xl animate-spin' />
+                                    :
+                                    <span>Register</span>
+                                }
+                            </button>
                         </form>
                         <div className='max-w-md  px-5 md:px-10'>
                             <h3 className='text-gray-200 text-center md:text-left text-sm py-3'>    Already have an account? <span className='text-blue-300'> <Link href={'/login'}>Login and continue</Link> </span></h3>

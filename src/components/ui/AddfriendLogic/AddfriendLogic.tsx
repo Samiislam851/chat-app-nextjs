@@ -8,18 +8,15 @@ import toast from 'react-hot-toast';
 import { CiSearch } from "react-icons/ci";
 import { FaSearch } from "react-icons/fa";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import SearchPeopleCard from '../SearchPeopleCard';
+import { MongoUser } from '@/types/mongoUser';
 
 type Props = {}
 type inputObject = {
     input: string
 }
 
-interface MongoUser {
-    _id: string;
-    name: string | null;
-    email: string | null;
-    image: string | null;
-}
+
 
 const AddfriendLogic = (props: Props) => {
 
@@ -72,7 +69,7 @@ const AddfriendLogic = (props: Props) => {
     }
 
 
-    console.log(searchedUsers);
+    // console.log(searchedUsers);
 
 
 
@@ -82,13 +79,13 @@ const AddfriendLogic = (props: Props) => {
         <div>
             <form className='max-w-md mx-auto pt-10 pb-5   ' onSubmit={handleSubmit(searchPeople)}>
 
-                <div className="flex flex-col md:flex-row py-2 justify-center items-center gap-2 overflow-hidden ">
+                <div className="flex flex-col md:flex-row py-2  justify-center items-center gap-2 overflow-hidden ">
                     <input {...register('input')}
                         type="text"
                         placeholder="you@email.com or name"
-                        className="px-4 py-2 border border-gray-300 text-gray-600 rounded-md focus:outline-none focus:border-indigo-500"
+                        className="w-full px-4 py-2 border border-gray-300 text-gray-600 rounded-md focus:outline-none focus:border-indigo-500"
                     />
-                    <button className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:bg-indigo-600 focus:outline-none flex items-center w-fit scale-95">
+                    <button className="px-4 py-2 bg-[#81689D] transition-all ease-in-out duration-300 text-white rounded-md hover:bg-[#365486] focus:bg-[#365486d2] focus:outline-none flex items-center w-fit scale-95">
                         <CiSearch /> <span>Search</span>
                     </button>
                 </div>
@@ -100,7 +97,7 @@ const AddfriendLogic = (props: Props) => {
             {loading ? <>
 
                 <div className='w-full flex justify-center items-center'>
-                    <AiOutlineLoading3Quarters className='animate-spin' />
+                    <AiOutlineLoading3Quarters className='animate-spin text-3xl' />
 
                 </div>
 
@@ -109,13 +106,13 @@ const AddfriendLogic = (props: Props) => {
                 {searchedUsers[0] ? <>
                     <div className='max-w-md  mx-auto'>
 
-                        <h3 className='text-xs text-purple-600 pb-1'>Search Result : </h3>
-                        <div className='border-t pt-5'>
+                        <h3 className='text-sm text-[#81689D] pb-1'>Search Result : </h3>
+                        <div className='border-t pt-0'>
 
 
                             <ul className='list-none '>
                                 {
-                                    searchedUsers.map((searchedUser: MongoUser) => <li>{searchedUser.name}</li>)
+                                    searchedUsers.map((searchedUser: MongoUser, i) =><SearchPeopleCard key={i}  searchUser={searchedUser}/> )
                                 }
 
                             </ul>
@@ -134,7 +131,7 @@ const AddfriendLogic = (props: Props) => {
                 </>}
             </> : <>
 
-                <h3 className='text-xl text-purple-500 text-center'>Search someone to add as a friend!</h3>
+                <h3 className='text-xl text-[#365486] opacity-70 py-20 text-center'>Search someone to add as a friend!</h3>
 
             </>}</>}
 

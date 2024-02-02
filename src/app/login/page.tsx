@@ -91,22 +91,29 @@ export default function page({ }: Props) {
     const { register, handleSubmit } = useForm<inputObject>()
     const handleLogin = (data: inputObject) => {
         console.log(data);
+        if (/^\s*$/.test(data.email) || /^\s*$/.test(data.password)) {
+            toast.error(' Please Enter something ')
+        } else {
+            setLoading(true)
+            emailSignIn(data.email, data.password).then((userCredential) => {
 
+                const user = userCredential.user;
+                saveUserToDB(user)
 
-        emailSignIn(data.email, data.password).then((userCredential) => {
-            // Signed in 
-            const user = userCredential.user;
-            saveUserToDB(user)
-
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-        });
+            })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    toast.error(errorMessage);
+                   
+                });
+        }
     }
 
-    return (
-
+    if (user) {
+        router.push('/dashboard')
+    }
+    else return (
         <>
 
             <div className='background min-h-[100vh] text-center flex flex-col-reverse md:flex-row gap-10 justify-center items-center '>
@@ -125,7 +132,13 @@ export default function page({ }: Props) {
 
                             <input  {...register('password')} className='p-2 m-2 w-full rounded-lg border border-gray-300 focus:border-gray-500 focus:outline-gray-300' type="text" placeholder='Enter your Password' />
 
-                            <button className='border py-2 px-4 rounded-lg bg-purple-600 text-white hover:shadow-xl transition-all ease-in-out duration-300 hover:scale-105 border-0 '>Login</button>
+                            <button className='border py-2 px-4 rounded-lg bg-[#81689D] text-white hover:shadow-xl transition-all ease-in-out duration-300 hover:scale-105 border-0 '>
+                                {loading ?
+                                    <AiOutlineLoading3Quarters className='text-2xl animate-spin' />
+                                    :
+                                    <span>Login</span>
+                                }
+                            </button>
                         </form>
                         <div className='max-w-md  px-5 md:px-10'>
                             <h3 className='text-gray-200 text-center  text-sm py-3'>    New to NextChat? <span className='text-blue-300'> <Link href={'/register'}>Create an account!</Link> </span></h3>
